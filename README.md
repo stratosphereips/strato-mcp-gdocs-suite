@@ -1,6 +1,6 @@
 # Stratosphere MCP GDocs Suite
 
-A Python MCP server that exposes Google Docs, Google Sheets, and Google Slides as tools for Claude. Currently supporting **14 tools** across documents, spreadsheets, and presentations.
+A Python MCP server that exposes Google Docs, Google Sheets, and Google Slides as tools for any MCP-compatible AI assistant. Currently supporting **14 tools** across documents, spreadsheets, and presentations.
 
 ## Prerequisites
 
@@ -41,9 +41,9 @@ cp .env.example .env
 docker compose run --rm -p 8082:8082 auth
 ```
 
-### Step 4: Register with Claude
+### Step 4: Register with your AI assistant
 
-Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 
 ```json
 {
@@ -62,7 +62,7 @@ Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json
 }
 ```
 
-Claude Code:
+**Claude Code:**
 
 ```bash
 claude mcp add --transport stdio google-docs -- \
@@ -71,6 +71,44 @@ claude mcp add --transport stdio google-docs -- \
     --env-file /absolute/path/to/.env \
     gdocs-suite-mcp:latest serve
 ```
+
+<details>
+<summary><strong>Gemini CLI</strong></summary>
+
+Add to `~/.gemini/settings.json` (or `.gemini/settings.json` for project-level):
+
+```json
+{
+  "mcpServers": {
+    "gdocs-suite": {
+      "command": "docker",
+      "args": [
+        "run", "--rm", "-i",
+        "-v", "gdocs-suite-mcp-tokens:/tokens",
+        "--env-file", "/absolute/path/to/.env",
+        "gdocs-suite-mcp:latest",
+        "serve"
+      ]
+    }
+  }
+}
+```
+
+</details>
+
+<details>
+<summary><strong>OpenAI Codex CLI</strong></summary>
+
+Add to `~/.codex/config.toml` (or `.codex/config.toml` for project-level):
+
+```toml
+[mcp_servers.gdocs-suite]
+command = "docker"
+args = ["run", "--rm", "-i", "-v", "gdocs-suite-mcp-tokens:/tokens", "--env-file", "/absolute/path/to/.env", "gdocs-suite-mcp:latest", "serve"]
+enabled = true
+```
+
+</details>
 
 ## Alternative: local install
 
