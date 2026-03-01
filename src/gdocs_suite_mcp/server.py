@@ -27,12 +27,14 @@ def _get_clients():
 
 def _register_tools() -> None:
     from gdocs_suite_mcp.tools.docs import register_docs_tools
+    from gdocs_suite_mcp.tools.forms import register_forms_tools
     from gdocs_suite_mcp.tools.sheets import register_sheets_tools
     from gdocs_suite_mcp.tools.slides import register_slides_tools
 
     register_docs_tools(mcp, _get_clients)
     register_sheets_tools(mcp, _get_clients)
     register_slides_tools(mcp, _get_clients)
+    register_forms_tools(mcp, _get_clients)
 
 
 def main() -> None:

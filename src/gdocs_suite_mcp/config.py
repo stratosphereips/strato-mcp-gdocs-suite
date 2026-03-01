@@ -27,6 +27,8 @@ DEFAULT_SCOPES = [
     "https://www.googleapis.com/auth/spreadsheets",
     "https://www.googleapis.com/auth/presentations",
     "https://www.googleapis.com/auth/drive.readonly",
+    "https://www.googleapis.com/auth/forms.body",
+    "https://www.googleapis.com/auth/forms.responses.readonly",
 ]
 DEFAULT_REDIRECT_URI = "http://localhost:8082"
 DEFAULT_TOKEN_STORE_PATH = "~/.config/gdocs-suite-mcp/"

@@ -11,4 +11,5 @@ def build_clients(credentials) -> dict[str, Resource]:
         "sheets": build("sheets", "v4", credentials=credentials),
         "slides": build("slides", "v1", credentials=credentials),
         "drive": build("drive", "v3", credentials=credentials),
+        "forms": build("forms", "v1", credentials=credentials),
     }

@@ -1,6 +1,6 @@
 # Stratosphere MCP GDocs Suite
 
-A Python MCP server that exposes Google Docs, Google Sheets, and Google Slides as tools for any MCP-compatible AI assistant. Currently supporting **14 tools** across documents, spreadsheets, and presentations.
+A Python MCP server that exposes Google Docs, Google Sheets, Google Slides, and Google Forms as tools for any MCP-compatible AI assistant. Currently supporting **22 tools** across documents, spreadsheets, presentations, and forms.
 
 ## Prerequisites
 
@@ -9,6 +9,7 @@ Enable these APIs in your Google Cloud project:
 2. Google Sheets API
 3. Google Slides API
 4. Google Drive API
+5. Google Forms API
 
 Then create OAuth credentials:
 1. Go to `APIs & Services` -> `OAuth consent screen` and configure it
@@ -17,6 +18,8 @@ Then create OAuth credentials:
    - `https://www.googleapis.com/auth/spreadsheets`
    - `https://www.googleapis.com/auth/presentations`
    - `https://www.googleapis.com/auth/drive.readonly`
+   - `https://www.googleapis.com/auth/forms.body`
+   - `https://www.googleapis.com/auth/forms.responses.readonly`
 3. Go to `APIs & Services` -> `Credentials` -> `Create credentials` -> `OAuth client ID` -> `Desktop app`
 4. Copy the `Client ID` and `Client Secret`
 
@@ -170,6 +173,21 @@ gdocs-suite-mcp
 | `list_presentations_tool` | `max_results=10`, `query=""` | List Google Slides files, optionally filtered by name |
 | `get_presentation_tool` | `presentation_id` | Get presentation metadata, slide count, and slide titles |
 | `create_presentation_tool` | `title` | Create a new presentation |
+
+### Forms
+
+| Tool | Parameters | Description |
+|---|---|---|
+| `list_forms_tool` | `max_results=10`, `query=""` | List Google Forms files, optionally filtered by name |
+| `get_form_tool` | `form_id` | Get form metadata, description, and all items/questions |
+| `create_form_tool` | `title`, `description=""` | Create a new form with optional description |
+| `add_question_tool` | `form_id`, `question_type`, `title`, `required=False`, `index=None`, `options=None` | Add a question (types: `text`, `paragraph`, `multiple_choice`, `checkbox`, `dropdown`, `scale`, `date`, `time`) |
+| `update_form_info_tool` | `form_id`, `title=""`, `description=""` | Update form title and/or description |
+| `delete_item_tool` | `form_id`, `item_id` | Delete a question/item by item ID |
+| `list_responses_tool` | `form_id`, `max_results=100` | List all responses for a form |
+| `get_response_tool` | `form_id`, `response_id` | Get a single response by response ID |
+
+> **Note:** The Forms tools require two additional OAuth scopes (`forms.body` and `forms.responses.readonly`). If you previously authenticated without these scopes, re-run the auth step: `docker compose run --rm -p 8082:8082 auth`
 
 ## Configuration reference
 

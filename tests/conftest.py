@@ -100,9 +100,34 @@ def mock_clients() -> dict[str, MagicMock]:
     drive_client = MagicMock()
     drive_client.files().list.return_value.execute.return_value = {"files": []}
 
+    forms_client = MagicMock()
+    forms_client.forms().get.return_value.execute.return_value = {
+        "formId": "form1",
+        "info": {"title": "My Form", "description": "A test form"},
+        "responderUri": "https://docs.google.com/forms/d/form1/viewform",
+        "items": [],
+    }
+    forms_client.forms().create.return_value.execute.return_value = {
+        "formId": "form-new",
+        "info": {"title": "New Form"},
+        "responderUri": "https://docs.google.com/forms/d/form-new/viewform",
+    }
+    forms_client.forms().batchUpdate.return_value.execute.return_value = {
+        "replies": [{"createItem": {"itemId": "item1"}}]
+    }
+    forms_client.forms().responses().list.return_value.execute.return_value = {
+        "responses": []
+    }
+    forms_client.forms().responses().get.return_value.execute.return_value = {
+        "responseId": "resp1",
+        "formId": "form1",
+        "answers": {},
+    }
+
     return {
         "docs": docs_client,
         "sheets": sheets_client,
         "slides": slides_client,
         "drive": drive_client,
+        "forms": forms_client,
     }
