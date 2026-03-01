@@ -7,14 +7,18 @@ from typing import Any
 
 from gdocs_suite_mcp.docs.drive import DocsApiError
 from gdocs_suite_mcp.docs.forms import (
+    add_page_break,
     add_question,
+    add_text_item,
     create_form,
     delete_item,
     get_form,
     get_response,
     list_forms,
     list_responses,
+    move_item,
     update_form_info,
+    update_form_settings,
 )
 from gdocs_suite_mcp.tools import sanitize_api_error
 
@@ -188,4 +192,122 @@ def register_forms_tools(mcp: Any, get_clients: Any) -> None:
             return _error(sanitize_api_error(exc))
         except Exception:
             logger.exception("Unexpected error in get_response_tool")
+            return _error("An internal error occurred. Check server logs for details.")
+
+    @mcp.tool()
+    def move_item_tool(form_id: str, original_index: int, new_index: int) -> str:
+        """Move a form item from original_index to new_index.
+
+        Both indices are 0-based positions in the form's item list.
+        Use get_form_tool to see current item order and indices.
+        """
+        if not form_id.strip():
+            return _error("form_id must not be empty")
+        try:
+            clients = get_clients()
+            result = move_item(
+                clients["forms"],
+                form_id=form_id,
+                original_index=original_index,
+                new_index=new_index,
+            )
+            return json.dumps(result)
+        except DocsApiError as exc:
+            return _error(sanitize_api_error(exc))
+        except Exception:
+            logger.exception("Unexpected error in move_item_tool")
+            return _error("An internal error occurred. Check server logs for details.")
+
+    @mcp.tool()
+    def add_text_item_tool(
+        form_id: str, title: str, description: str = "", index: int = 0
+    ) -> str:
+        """Add a section header (text item) to a form.
+
+        Text items display a title and optional description — useful for
+        grouping questions under named sections.
+        index is the 0-based position to insert the item at.
+        """
+        if not form_id.strip():
+            return _error("form_id must not be empty")
+        if not title.strip():
+            return _error("title must not be empty")
+        try:
+            clients = get_clients()
+            result = add_text_item(
+                clients["forms"],
+                form_id=form_id,
+                title=title,
+                description=description,
+                index=index,
+            )
+            return json.dumps(result)
+        except DocsApiError as exc:
+            return _error(sanitize_api_error(exc))
+        except Exception:
+            logger.exception("Unexpected error in add_text_item_tool")
+            return _error("An internal error occurred. Check server logs for details.")
+
+    @mcp.tool()
+    def add_page_break_tool(
+        form_id: str, title: str = "", index: int = 0
+    ) -> str:
+        """Add a page break to a form, starting a new section/page.
+
+        An optional title is displayed at the top of the new page.
+        index is the 0-based position to insert the page break at.
+        """
+        if not form_id.strip():
+            return _error("form_id must not be empty")
+        try:
+            clients = get_clients()
+            result = add_page_break(
+                clients["forms"],
+                form_id=form_id,
+                title=title,
+                index=index,
+            )
+            return json.dumps(result)
+        except DocsApiError as exc:
+            return _error(sanitize_api_error(exc))
+        except Exception:
+            logger.exception("Unexpected error in add_page_break_tool")
+            return _error("An internal error occurred. Check server logs for details.")
+
+    @mcp.tool()
+    def update_form_settings_tool(
+        form_id: str,
+        email_collection_type: str = "",
+        is_quiz: bool | None = None,
+    ) -> str:
+        """Update form settings.
+
+        email_collection_type controls email collection:
+          - DO_NOT_COLLECT: do not collect email addresses
+          - VERIFIED: collect verified Google account email automatically
+          - RESPONDER_INPUT: ask respondents to enter their email
+
+        is_quiz: set to true to enable quiz/grading mode, false to disable.
+
+        At least one of the two must be provided.
+        """
+        if not form_id.strip():
+            return _error("form_id must not be empty")
+        if not email_collection_type.strip() and is_quiz is None:
+            return _error(
+                "At least one of email_collection_type or is_quiz must be provided"
+            )
+        try:
+            clients = get_clients()
+            result = update_form_settings(
+                clients["forms"],
+                form_id=form_id,
+                email_collection_type=email_collection_type,
+                is_quiz=is_quiz,
+            )
+            return json.dumps(result)
+        except DocsApiError as exc:
+            return _error(sanitize_api_error(exc))
+        except Exception:
+            logger.exception("Unexpected error in update_form_settings_tool")
             return _error("An internal error occurred. Check server logs for details.")

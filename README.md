@@ -1,6 +1,6 @@
 # Stratosphere MCP GDocs Suite
 
-A Python MCP server that exposes Google Docs, Google Sheets, Google Slides, and Google Forms as tools for any MCP-compatible AI assistant. Currently supporting **22 tools** across documents, spreadsheets, presentations, and forms.
+A Python MCP server that exposes Google Docs, Google Sheets, Google Slides, and Google Forms as tools for any MCP-compatible AI assistant. Currently supporting **26 tools** across documents, spreadsheets, presentations, and forms.
 
 ## Prerequisites
 
@@ -186,6 +186,10 @@ gdocs-suite-mcp
 | `delete_item_tool` | `form_id`, `item_id` | Delete a question/item by item ID |
 | `list_responses_tool` | `form_id`, `max_results=100` | List all responses for a form |
 | `get_response_tool` | `form_id`, `response_id` | Get a single response by response ID |
+| `move_item_tool` | `form_id`, `original_index`, `new_index` | Move an item to a new position (0-based indices) |
+| `add_text_item_tool` | `form_id`, `title`, `description=""`, `index=0` | Add a section header with optional description |
+| `add_page_break_tool` | `form_id`, `title=""`, `index=0` | Add a page break to start a new section |
+| `update_form_settings_tool` | `form_id`, `email_collection_type=""`, `is_quiz=None` | Set email collection (`DO_NOT_COLLECT`, `VERIFIED`, `RESPONDER_INPUT`) and/or quiz mode |
 
 > **Note:** The Forms tools require two additional OAuth scopes (`forms.body` and `forms.responses.readonly`). If you previously authenticated without these scopes, re-run the auth step: `docker compose run --rm -p 8082:8082 auth`
 

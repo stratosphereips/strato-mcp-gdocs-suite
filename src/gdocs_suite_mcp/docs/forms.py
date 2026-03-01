@@ -205,17 +205,35 @@ def delete_item(
     form_id: str,
     item_id: str,
 ) -> dict[str, Any]:
-    """Delete a question/item by item ID."""
+    """Delete a question/item by item ID.
+
+    Looks up the item's index from the form first, then deletes by index
+    (the Forms API deleteItem requires a location index, not an item ID).
+    """
+    try:
+        form = forms_client.forms().get(formId=form_id).execute()
+    except HttpError as exc:
+        raise DocsApiError(
+            f"Failed to fetch form {form_id!r} to resolve item index: {exc}"
+        ) from exc
+
+    items = form.get("items", [])
+    index = next(
+        (i for i, item in enumerate(items) if item.get("itemId") == item_id), None
+    )
+    if index is None:
+        raise DocsApiError(
+            f"Item {item_id!r} not found in form {form_id!r}"
+        )
+
     try:
         forms_client.forms().batchUpdate(
             formId=form_id,
             body={
-                "requests": [
-                    {"deleteItem": {"location": {"index": 0}, "itemId": item_id}}
-                ]
+                "requests": [{"deleteItem": {"location": {"index": index}}}]
             },
         ).execute()
-        return {"formId": form_id, "deletedItemId": item_id}
+        return {"formId": form_id, "deletedItemId": item_id, "deletedIndex": index}
     except HttpError as exc:
         raise DocsApiError(
             f"Failed to delete item {item_id!r} from form {form_id!r}: {exc}"
@@ -256,4 +274,131 @@ def get_response(
     except HttpError as exc:
         raise DocsApiError(
             f"Failed to get response {response_id!r} from form {form_id!r}: {exc}"
+        ) from exc
+
+
+def move_item(
+    forms_client: Resource,
+    form_id: str,
+    original_index: int,
+    new_index: int,
+) -> dict[str, Any]:
+    """Move an item from original_index to new_index."""
+    try:
+        forms_client.forms().batchUpdate(
+            formId=form_id,
+            body={
+                "requests": [
+                    {
+                        "moveItem": {
+                            "originalLocation": {"index": original_index},
+                            "newLocation": {"index": new_index},
+                        }
+                    }
+                ]
+            },
+        ).execute()
+        return {"formId": form_id, "movedFrom": original_index, "movedTo": new_index}
+    except HttpError as exc:
+        raise DocsApiError(f"Failed to move item in form {form_id!r}: {exc}") from exc
+
+
+def add_text_item(
+    forms_client: Resource,
+    form_id: str,
+    title: str,
+    description: str = "",
+    index: int = 0,
+) -> dict[str, Any]:
+    """Add a text/section-header item to a form."""
+    item: dict[str, Any] = {"title": title, "textItem": {}}
+    if description:
+        item["description"] = description
+    try:
+        result = forms_client.forms().batchUpdate(
+            formId=form_id,
+            body={
+                "requests": [
+                    {"createItem": {"item": item, "location": {"index": index}}}
+                ]
+            },
+        ).execute()
+        replies = result.get("replies", [{}])
+        item_id = replies[0].get("createItem", {}).get("itemId", "") if replies else ""
+        return {"formId": form_id, "itemId": item_id, "title": title}
+    except HttpError as exc:
+        raise DocsApiError(f"Failed to add text item to form {form_id!r}: {exc}") from exc
+
+
+def add_page_break(
+    forms_client: Resource,
+    form_id: str,
+    title: str = "",
+    index: int = 0,
+) -> dict[str, Any]:
+    """Add a page break to a form."""
+    item: dict[str, Any] = {"pageBreakItem": {}}
+    if title:
+        item["title"] = title
+    try:
+        result = forms_client.forms().batchUpdate(
+            formId=form_id,
+            body={
+                "requests": [
+                    {"createItem": {"item": item, "location": {"index": index}}}
+                ]
+            },
+        ).execute()
+        replies = result.get("replies", [{}])
+        item_id = replies[0].get("createItem", {}).get("itemId", "") if replies else ""
+        return {"formId": form_id, "itemId": item_id, "title": title}
+    except HttpError as exc:
+        raise DocsApiError(f"Failed to add page break to form {form_id!r}: {exc}") from exc
+
+
+_VALID_EMAIL_COLLECTION = {"DO_NOT_COLLECT", "VERIFIED", "RESPONDER_INPUT"}
+
+
+def update_form_settings(
+    forms_client: Resource,
+    form_id: str,
+    email_collection_type: str = "",
+    is_quiz: bool | None = None,
+) -> dict[str, Any]:
+    """Update form settings: email collection type and/or quiz mode."""
+    if email_collection_type and email_collection_type not in _VALID_EMAIL_COLLECTION:
+        raise DocsApiError(
+            f"Invalid email_collection_type {email_collection_type!r}. "
+            f"Choose from: {', '.join(sorted(_VALID_EMAIL_COLLECTION))}"
+        )
+    settings: dict[str, Any] = {}
+    mask_fields = []
+    if email_collection_type:
+        settings["emailCollectionType"] = email_collection_type
+        mask_fields.append("emailCollectionType")
+    if is_quiz is not None:
+        settings["quizSettings"] = {"isQuiz": is_quiz}
+        mask_fields.append("quizSettings")
+    if not mask_fields:
+        raise DocsApiError(
+            "At least one of email_collection_type or is_quiz must be provided"
+        )
+    try:
+        forms_client.forms().batchUpdate(
+            formId=form_id,
+            body={
+                "requests": [
+                    {
+                        "updateSettings": {
+                            "settings": settings,
+                            "updateMask": ",".join(mask_fields),
+                        }
+                    }
+                ]
+            },
+        ).execute()
+        return {"formId": form_id, "updated": mask_fields}
+    except HttpError as exc:
+        raise DocsApiError(
+            f"Failed to update settings for form {form_id!r}: {exc}"
         ) from exc

@@ -105,7 +105,7 @@ def mock_clients() -> dict[str, MagicMock]:
         "formId": "form1",
         "info": {"title": "My Form", "description": "A test form"},
         "responderUri": "https://docs.google.com/forms/d/form1/viewform",
-        "items": [],
+        "items": [{"itemId": "item1", "title": "Question 1"}],
     }
     forms_client.forms().create.return_value.execute.return_value = {
         "formId": "form-new",

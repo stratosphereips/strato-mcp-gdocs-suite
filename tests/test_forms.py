@@ -149,3 +149,76 @@ class TestFormsTools:
             result = json.loads(self.recorder.call("get_form_tool", form_id="form1"))
             assert "error" in result
             assert "403" in result["error"]
+
+    def test_move_item_returns_indices(self):
+        result = json.loads(
+            self.recorder.call(
+                "move_item_tool", form_id="form1", original_index=0, new_index=2
+            )
+        )
+        assert result["movedFrom"] == 0
+        assert result["movedTo"] == 2
+
+    def test_move_item_rejects_empty_form_id(self):
+        result = json.loads(
+            self.recorder.call("move_item_tool", form_id="", original_index=0, new_index=1)
+        )
+        assert "error" in result
+
+    def test_add_text_item_returns_item_id(self):
+        result = json.loads(
+            self.recorder.call(
+                "add_text_item_tool",
+                form_id="form1",
+                title="Section A",
+                description="Questions about section A",
+            )
+        )
+        assert result["formId"] == "form1"
+        assert result["itemId"] == "item1"
+
+    def test_add_text_item_rejects_empty_title(self):
+        result = json.loads(
+            self.recorder.call("add_text_item_tool", form_id="form1", title="")
+        )
+        assert "error" in result
+
+    def test_add_page_break_returns_item_id(self):
+        result = json.loads(
+            self.recorder.call(
+                "add_page_break_tool", form_id="form1", title="Page 2", index=3
+            )
+        )
+        assert result["formId"] == "form1"
+        assert result["itemId"] == "item1"
+
+    def test_add_page_break_rejects_empty_form_id(self):
+        result = json.loads(
+            self.recorder.call("add_page_break_tool", form_id="")
+        )
+        assert "error" in result
+
+    def test_update_form_settings_email_collection(self):
+        result = json.loads(
+            self.recorder.call(
+                "update_form_settings_tool",
+                form_id="form1",
+                email_collection_type="VERIFIED",
+            )
+        )
+        assert result["formId"] == "form1"
+        assert "emailCollectionType" in result["updated"]
+
+    def test_update_form_settings_quiz_mode(self):
+        result = json.loads(
+            self.recorder.call(
+                "update_form_settings_tool", form_id="form1", is_quiz=True
+            )
+        )
+        assert "quizSettings" in result["updated"]
+
+    def test_update_form_settings_rejects_no_fields(self):
+        result = json.loads(
+            self.recorder.call("update_form_settings_tool", form_id="form1")
+        )
+        assert "error" in result
