@@ -1,7 +1,7 @@
 services:
   auth:
     build: .
-    image: google-docs-mcp:latest
+    image: gdocs-suite-mcp:latest
     command: auth
     ports:
       - "8082:8082"
@@ -13,7 +13,7 @@ services:
 
   mcp:
     build: .
-    image: google-docs-mcp:latest
+    image: gdocs-suite-mcp:latest
     command: serve
     stdin_open: true
     env_file: .env
@@ -24,4 +24,4 @@ services:
 
 volumes:
   tokens:
-    name: google-docs-mcp-tokens
+    name: gdocs-suite-mcp-tokens

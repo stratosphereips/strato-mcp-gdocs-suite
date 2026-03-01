@@ -3,7 +3,7 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 [project]
-name = "google-docs-mcp"
+name = "gdocs-suite-mcp"
 version = "0.1.0"
 description = "MCP server exposing Google Docs, Sheets, and Slides as tools for Claude"
 requires-python = ">=3.10"
@@ -16,11 +16,11 @@ dependencies = [
 ]
 
 [project.scripts]
-google-docs-mcp  = "google_docs_mcp.server:main"
-google-docs-auth = "google_docs_mcp.server:auth_main"
+gdocs-suite-mcp  = "gdocs_suite_mcp.server:main"
+gdocs-suite-auth = "gdocs_suite_mcp.server:auth_main"
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/google_docs_mcp"]
+packages = ["src/gdocs_suite_mcp"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

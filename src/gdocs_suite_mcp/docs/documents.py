@@ -6,7 +6,7 @@ from typing import Any
 from googleapiclient.discovery import Resource
 from googleapiclient.errors import HttpError
 
-from google_docs_mcp.docs.drive import DocsApiError
+from gdocs_suite_mcp.docs.drive import DocsApiError
 
 
 def extract_plain_text(document: dict[str, Any]) -> str:

@@ -9,7 +9,7 @@ from mcp.server.fastmcp import FastMCP
 
 logger = logging.getLogger(__name__)
 
-mcp = FastMCP("Google Docs")
+mcp = FastMCP("GDocs Suite")
 
 _clients = None
 _client_lock = threading.Lock()
@@ -26,9 +26,9 @@ def _get_clients():
 
 
 def _register_tools() -> None:
-    from google_docs_mcp.tools.docs import register_docs_tools
-    from google_docs_mcp.tools.sheets import register_sheets_tools
-    from google_docs_mcp.tools.slides import register_slides_tools
+    from gdocs_suite_mcp.tools.docs import register_docs_tools
+    from gdocs_suite_mcp.tools.sheets import register_sheets_tools
+    from gdocs_suite_mcp.tools.slides import register_slides_tools
 
     register_docs_tools(mcp, _get_clients)
     register_sheets_tools(mcp, _get_clients)
@@ -39,10 +39,10 @@ def main() -> None:
     """Entry point called by the pyproject.toml script."""
     global _clients
 
-    from google_docs_mcp.auth.oauth import DocsAuthError, get_credentials
-    from google_docs_mcp.auth.token_store import FileTokenStore
-    from google_docs_mcp.config import ConfigurationError, load_config
-    from google_docs_mcp.docs.client import build_clients
+    from gdocs_suite_mcp.auth.oauth import DocsAuthError, get_credentials
+    from gdocs_suite_mcp.auth.token_store import FileTokenStore
+    from gdocs_suite_mcp.config import ConfigurationError, load_config
+    from gdocs_suite_mcp.docs.client import build_clients
 
     try:
         config = load_config()
@@ -73,9 +73,9 @@ def main() -> None:
 
 def auth_main() -> None:
     """Entry point for the google-docs-auth command."""
-    from google_docs_mcp.auth.oauth import DocsAuthError, get_credentials
-    from google_docs_mcp.auth.token_store import FileTokenStore
-    from google_docs_mcp.config import ConfigurationError, load_config
+    from gdocs_suite_mcp.auth.oauth import DocsAuthError, get_credentials
+    from gdocs_suite_mcp.auth.token_store import FileTokenStore
+    from gdocs_suite_mcp.config import ConfigurationError, load_config
 
     try:
         config = load_config()

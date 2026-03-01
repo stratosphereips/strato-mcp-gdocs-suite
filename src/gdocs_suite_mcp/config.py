@@ -29,7 +29,7 @@ DEFAULT_SCOPES = [
     "https://www.googleapis.com/auth/drive.readonly",
 ]
 DEFAULT_REDIRECT_URI = "http://localhost:8082"
-DEFAULT_TOKEN_STORE_PATH = "~/.config/google-docs-mcp/"
+DEFAULT_TOKEN_STORE_PATH = "~/.config/gdocs-suite-mcp/"
 
 
 @dataclass

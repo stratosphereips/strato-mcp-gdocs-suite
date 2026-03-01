@@ -10,11 +10,11 @@ import pytest
 
 @pytest.fixture(autouse=True)
 def _no_load_dotenv(monkeypatch):
-    monkeypatch.setattr("google_docs_mcp.config.load_dotenv", lambda **_: None)
+    monkeypatch.setattr("gdocs_suite_mcp.config.load_dotenv", lambda **_: None)
 
 
-from google_docs_mcp.auth.token_store import FileTokenStore
-from google_docs_mcp.config import Config
+from gdocs_suite_mcp.auth.token_store import FileTokenStore
+from gdocs_suite_mcp.config import Config
 
 
 @pytest.fixture()

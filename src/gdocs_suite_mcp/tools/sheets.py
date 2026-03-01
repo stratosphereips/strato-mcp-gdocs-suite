@@ -5,15 +5,15 @@ import json
 import logging
 from typing import Any
 
-from google_docs_mcp.docs.drive import DocsApiError, list_files
-from google_docs_mcp.docs.sheets import (
+from gdocs_suite_mcp.docs.drive import DocsApiError, list_files
+from gdocs_suite_mcp.docs.sheets import (
     append_rows,
     create_spreadsheet,
     get_spreadsheet,
     read_range,
     write_range,
 )
-from google_docs_mcp.tools import sanitize_api_error
+from gdocs_suite_mcp.tools import sanitize_api_error
 
 logger = logging.getLogger(__name__)
 

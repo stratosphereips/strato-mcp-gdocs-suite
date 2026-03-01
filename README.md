@@ -1,4 +1,4 @@
-# Stratosphere MCP Google Docs
+# Stratosphere MCP GDocs Suite
 
 A Python MCP server that exposes Google Docs, Google Sheets, and Google Slides as tools for Claude. Currently supporting **14 tools** across documents, spreadsheets, and presentations.
 
@@ -47,9 +47,9 @@ Claude Desktop (`~/Library/Application Support/Claude/claude_desktop_config.json
       "command": "docker",
       "args": [
         "run", "--rm", "-i",
-        "-v", "google-docs-mcp-tokens:/tokens",
+        "-v", "gdocs-suite-mcp-tokens:/tokens",
         "--env-file", "/absolute/path/to/.env",
-        "google-docs-mcp:latest",
+        "gdocs-suite-mcp:latest",
         "serve"
       ]
     }
@@ -62,9 +62,9 @@ Claude Code:
 ```bash
 claude mcp add --transport stdio google-docs -- \
   docker run --rm -i \
-    -v google-docs-mcp-tokens:/tokens \
+    -v gdocs-suite-mcp-tokens:/tokens \
     --env-file /absolute/path/to/.env \
-    google-docs-mcp:latest serve
+    gdocs-suite-mcp:latest serve
 ```
 
 ## Alternative: local install
@@ -86,7 +86,7 @@ google-docs-auth
 Start MCP server:
 
 ```bash
-google-docs-mcp
+gdocs-suite-mcp
 ```
 
 ## Available Tools
@@ -127,7 +127,7 @@ google-docs-mcp
 | `GOOGLE_CLIENT_ID` | Yes | - | OAuth client ID |
 | `GOOGLE_CLIENT_SECRET` | Yes | - | OAuth client secret |
 | `GOOGLE_REDIRECT_URI` | No | `http://localhost:8082` | OAuth redirect URI |
-| `TOKEN_STORE_PATH` | No | `~/.config/google-docs-mcp/` (local) / `/tokens` (Docker) | Token storage directory |
+| `TOKEN_STORE_PATH` | No | `~/.config/gdocs-suite-mcp/` (local) / `/tokens` (Docker) | Token storage directory |
 | `GOOGLE_SCOPES` | No | docs + sheets + slides + drive.readonly | Comma-separated OAuth scopes |
 | `LOG_LEVEL` | No | `WARNING` | Log level (stderr only) |
 

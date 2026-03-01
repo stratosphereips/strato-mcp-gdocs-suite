@@ -6,7 +6,7 @@ from unittest.mock import MagicMock
 import pytest
 from googleapiclient.errors import HttpError
 
-from google_docs_mcp.docs.drive import DocsApiError, list_files, search_files
+from gdocs_suite_mcp.docs.drive import DocsApiError, list_files, search_files
 
 
 def _http_error(status: int) -> HttpError:

@@ -5,9 +5,9 @@ import json
 import logging
 from typing import Any
 
-from google_docs_mcp.docs.drive import DocsApiError, list_files
-from google_docs_mcp.docs.slides import create_presentation, get_presentation
-from google_docs_mcp.tools import sanitize_api_error
+from gdocs_suite_mcp.docs.drive import DocsApiError, list_files
+from gdocs_suite_mcp.docs.slides import create_presentation, get_presentation
+from gdocs_suite_mcp.tools import sanitize_api_error
 
 logger = logging.getLogger(__name__)
 

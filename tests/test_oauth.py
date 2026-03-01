@@ -7,7 +7,7 @@ import pytest
 from google.auth.exceptions import RefreshError
 from google.oauth2.credentials import Credentials
 
-from google_docs_mcp.auth.oauth import DocsAuthError, get_credentials
+from gdocs_suite_mcp.auth.oauth import DocsAuthError, get_credentials
 
 
 def _expired_credentials() -> Credentials:
@@ -33,7 +33,7 @@ def test_get_credentials_uses_cached_valid_token(valid_config, tmp_token_store):
         },
     )
 
-    with patch("google_docs_mcp.auth.oauth.Credentials") as creds_cls:
+    with patch("gdocs_suite_mcp.auth.oauth.Credentials") as creds_cls:
         mock_creds = MagicMock()
         mock_creds.valid = True
         creds_cls.return_value = mock_creds
@@ -57,7 +57,7 @@ def test_get_credentials_refreshes_expired_token(valid_config, tmp_token_store):
         },
     )
 
-    with patch("google_docs_mcp.auth.oauth.Credentials") as creds_cls:
+    with patch("gdocs_suite_mcp.auth.oauth.Credentials") as creds_cls:
         mock_creds = MagicMock()
         mock_creds.valid = False
         mock_creds.expired = True
@@ -84,7 +84,7 @@ def test_get_credentials_refresh_failure_then_headless_raises(valid_config, tmp_
         },
     )
 
-    with patch("google_docs_mcp.auth.oauth.Credentials") as creds_cls:
+    with patch("gdocs_suite_mcp.auth.oauth.Credentials") as creds_cls:
         mock_creds = MagicMock()
         mock_creds.valid = False
         mock_creds.expired = True
@@ -105,7 +105,7 @@ def test_get_credentials_runs_oauth_flow_when_not_headless(valid_config, tmp_tok
     flow_creds.scopes = ["https://www.googleapis.com/auth/documents"]
 
     with patch(
-        "google_docs_mcp.auth.oauth.InstalledAppFlow.from_client_config"
+        "gdocs_suite_mcp.auth.oauth.InstalledAppFlow.from_client_config"
     ) as from_config:
         flow = MagicMock()
         flow.run_local_server.return_value = flow_creds

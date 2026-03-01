@@ -10,8 +10,8 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-from google_docs_mcp.auth.token_store import TokenStore
-from google_docs_mcp.config import Config
+from gdocs_suite_mcp.auth.token_store import TokenStore
+from gdocs_suite_mcp.config import Config
 
 logger = logging.getLogger(__name__)
 

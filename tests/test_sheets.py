@@ -6,8 +6,8 @@ from unittest.mock import MagicMock
 import pytest
 from googleapiclient.errors import HttpError
 
-from google_docs_mcp.docs.drive import DocsApiError
-from google_docs_mcp.docs.sheets import (
+from gdocs_suite_mcp.docs.drive import DocsApiError
+from gdocs_suite_mcp.docs.sheets import (
     append_rows,
     create_spreadsheet,
     get_spreadsheet,

@@ -5,9 +5,9 @@ import json
 import logging
 from typing import Any
 
-from google_docs_mcp.docs.documents import batch_update, create_document, get_document
-from google_docs_mcp.docs.drive import DocsApiError, list_files, search_files
-from google_docs_mcp.tools import sanitize_api_error
+from gdocs_suite_mcp.docs.documents import batch_update, create_document, get_document
+from gdocs_suite_mcp.docs.drive import DocsApiError, list_files, search_files
+from gdocs_suite_mcp.tools import sanitize_api_error
 
 logger = logging.getLogger(__name__)
 

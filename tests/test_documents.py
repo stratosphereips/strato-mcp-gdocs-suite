@@ -6,13 +6,13 @@ from unittest.mock import MagicMock
 import pytest
 from googleapiclient.errors import HttpError
 
-from google_docs_mcp.docs.documents import (
+from gdocs_suite_mcp.docs.documents import (
     batch_update,
     create_document,
     extract_plain_text,
     get_document,
 )
-from google_docs_mcp.docs.drive import DocsApiError
+from gdocs_suite_mcp.docs.drive import DocsApiError
 
 
 def _http_error(status: int) -> HttpError:

@@ -1,7 +1,7 @@
 """Token store tests."""
 from __future__ import annotations
 
-from google_docs_mcp.auth.token_store import FileTokenStore
+from gdocs_suite_mcp.auth.token_store import FileTokenStore
 
 
 def test_file_token_store_round_trip(tmp_path):

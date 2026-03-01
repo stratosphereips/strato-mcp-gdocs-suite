@@ -25,7 +25,7 @@ class ToolRecorder:
 class TestDocsTools:
     @pytest.fixture(autouse=True)
     def setup(self, mock_clients):
-        from google_docs_mcp.tools.docs import register_docs_tools
+        from gdocs_suite_mcp.tools.docs import register_docs_tools
 
         self.recorder = ToolRecorder()
         self.clients = mock_clients
@@ -64,7 +64,7 @@ class TestDocsTools:
 class TestSheetsTools:
     @pytest.fixture(autouse=True)
     def setup(self, mock_clients):
-        from google_docs_mcp.tools.sheets import register_sheets_tools
+        from gdocs_suite_mcp.tools.sheets import register_sheets_tools
 
         self.recorder = ToolRecorder()
         self.clients = mock_clients
@@ -96,7 +96,7 @@ class TestSheetsTools:
 class TestSlidesTools:
     @pytest.fixture(autouse=True)
     def setup(self, mock_clients):
-        from google_docs_mcp.tools.slides import register_slides_tools
+        from gdocs_suite_mcp.tools.slides import register_slides_tools
 
         self.recorder = ToolRecorder()
         self.clients = mock_clients

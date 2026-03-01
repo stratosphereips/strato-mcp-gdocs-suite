@@ -6,7 +6,7 @@ from typing import Any
 from googleapiclient.discovery import Resource
 from googleapiclient.errors import HttpError
 
-from google_docs_mcp.docs.drive import DocsApiError
+from gdocs_suite_mcp.docs.drive import DocsApiError
 
 
 def get_spreadsheet(sheets_client: Resource, spreadsheet_id: str) -> dict[str, Any]:

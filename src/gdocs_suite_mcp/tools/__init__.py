@@ -4,7 +4,7 @@ from __future__ import annotations
 import logging
 import re
 
-from google_docs_mcp.docs.drive import DocsApiError
+from gdocs_suite_mcp.docs.drive import DocsApiError
 
 logger = logging.getLogger(__name__)
 
