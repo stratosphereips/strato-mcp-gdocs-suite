@@ -43,7 +43,10 @@ docker compose run --rm -p 8082:8082 auth
 
 ### Step 4: Register with your AI assistant
 
-**Claude Desktop** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+<details>
+<summary><strong>Claude Desktop</strong></summary>
+
+Add to `~/Library/Application Support/Claude/claude_desktop_config.json`:
 
 ```json
 {
@@ -62,7 +65,10 @@ docker compose run --rm -p 8082:8082 auth
 }
 ```
 
-**Claude Code:**
+</details>
+
+<details>
+<summary><strong>Claude Code</strong></summary>
 
 ```bash
 claude mcp add --transport stdio google-docs -- \
@@ -71,6 +77,8 @@ claude mcp add --transport stdio google-docs -- \
     --env-file /absolute/path/to/.env \
     gdocs-suite-mcp:latest serve
 ```
+
+</details>
 
 <details>
 <summary><strong>Gemini CLI</strong></summary>
