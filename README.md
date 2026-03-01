@@ -12,8 +12,13 @@ Enable these APIs in your Google Cloud project:
 
 Then create OAuth credentials:
 1. Go to `APIs & Services` -> `OAuth consent screen` and configure it
-2. Go to `APIs & Services` -> `Credentials` -> `Create credentials` -> `OAuth client ID` -> `Desktop app`
-3. Copy the `Client ID` and `Client Secret`
+2. On the OAuth consent screen, go to **Scopes** and add the following scopes:
+   - `https://www.googleapis.com/auth/documents`
+   - `https://www.googleapis.com/auth/spreadsheets`
+   - `https://www.googleapis.com/auth/presentations`
+   - `https://www.googleapis.com/auth/drive.readonly`
+3. Go to `APIs & Services` -> `Credentials` -> `Create credentials` -> `OAuth client ID` -> `Desktop app`
+4. Copy the `Client ID` and `Client Secret`
 
 ## Quick start (Docker)
 
