@@ -33,6 +33,8 @@ def get_form(forms_client: Resource, form_id: str) -> dict[str, Any]:
                 "itemId": item.get("itemId"),
                 "title": item.get("title", ""),
             }
+            if item.get("description"):
+                entry["description"] = item["description"]
             for q_type in (
                 "questionItem",
                 "questionGroupItem",
@@ -43,7 +45,7 @@ def get_form(forms_client: Resource, form_id: str) -> dict[str, Any]:
             ):
                 if q_type in item:
                     entry["type"] = q_type
-                    q = item[q_type].get("question", {})
+                    q = item[q_type].get("question", {}) if q_type not in ("pageBreakItem", "textItem") else {}
                     if q:
                         entry["required"] = q.get("required", False)
                         for answer_type in (
@@ -81,8 +83,12 @@ def create_form(
     """Create a new Google Form."""
     try:
         result = forms_client.forms().create(body={"info": {"title": title}}).execute()
-        form_id = result.get("formId")
-        if description:
+    except HttpError as exc:
+        raise DocsApiError(f"Failed to create form: {exc}") from exc
+
+    form_id = result.get("formId")
+    if description:
+        try:
             forms_client.forms().batchUpdate(
                 formId=form_id,
                 body={
@@ -96,13 +102,27 @@ def create_form(
                     ]
                 },
             ).execute()
-        return {
-            "formId": form_id,
-            "title": result.get("info", {}).get("title", title),
-            "responderUri": result.get("responderUri", ""),
-        }
+        except HttpError as exc:
+            raise DocsApiError(
+                f"Form {form_id!r} created but failed to set description: {exc}"
+            ) from exc
+
+    return {
+        "formId": form_id,
+        "title": result.get("info", {}).get("title", title),
+        "responderUri": result.get("responderUri", ""),
+    }
+
+
+def _item_count(forms_client: Resource, form_id: str) -> int:
+    """Return the current number of items in a form."""
+    try:
+        form = forms_client.forms().get(formId=form_id).execute()
+        return len(form.get("items", []))
     except HttpError as exc:
-        raise DocsApiError(f"Failed to create form: {exc}") from exc
+        raise DocsApiError(
+            f"Failed to fetch form {form_id!r} to determine item count: {exc}"
+        ) from exc
 
 
 _QUESTION_TYPE_MAP = {
@@ -147,9 +167,10 @@ def add_question(
             **question_body,
         }
     }
+    resolved_index = index if index is not None else _item_count(forms_client, form_id)
     create_item: dict[str, Any] = {
         "item": item,
-        "location": {"index": index if index is not None else 0},
+        "location": {"index": resolved_index},
     }
 
     try:
@@ -308,9 +329,10 @@ def add_text_item(
     form_id: str,
     title: str,
     description: str = "",
-    index: int = 0,
+    index: int | None = None,
 ) -> dict[str, Any]:
     """Add a text/section-header item to a form."""
+    resolved_index = index if index is not None else _item_count(forms_client, form_id)
     item: dict[str, Any] = {"title": title, "textItem": {}}
     if description:
         item["description"] = description
@@ -319,7 +341,7 @@ def add_text_item(
             formId=form_id,
             body={
                 "requests": [
-                    {"createItem": {"item": item, "location": {"index": index}}}
+                    {"createItem": {"item": item, "location": {"index": resolved_index}}}
                 ]
             },
         ).execute()
@@ -334,9 +356,10 @@ def add_page_break(
     forms_client: Resource,
     form_id: str,
     title: str = "",
-    index: int = 0,
+    index: int | None = None,
 ) -> dict[str, Any]:
     """Add a page break to a form."""
+    resolved_index = index if index is not None else _item_count(forms_client, form_id)
     item: dict[str, Any] = {"pageBreakItem": {}}
     if title:
         item["title"] = title
@@ -345,7 +368,7 @@ def add_page_break(
             formId=form_id,
             body={
                 "requests": [
-                    {"createItem": {"item": item, "location": {"index": index}}}
+                    {"createItem": {"item": item, "location": {"index": resolved_index}}}
                 ]
             },
         ).execute()

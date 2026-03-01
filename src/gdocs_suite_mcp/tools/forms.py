@@ -220,7 +220,7 @@ def register_forms_tools(mcp: Any, get_clients: Any) -> None:
 
     @mcp.tool()
     def add_text_item_tool(
-        form_id: str, title: str, description: str = "", index: int = 0
+        form_id: str, title: str, description: str = "", index: int | None = None
     ) -> str:
         """Add a section header (text item) to a form.
 
@@ -250,7 +250,7 @@ def register_forms_tools(mcp: Any, get_clients: Any) -> None:
 
     @mcp.tool()
     def add_page_break_tool(
-        form_id: str, title: str = "", index: int = 0
+        form_id: str, title: str = "", index: int | None = None
     ) -> str:
         """Add a page break to a form, starting a new section/page.
 
