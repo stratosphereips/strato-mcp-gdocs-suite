@@ -2,7 +2,7 @@
 set -e
 
 case "$1" in
-  auth)  exec google-docs-auth ;;
-  serve) exec google-docs-mcp  ;;
+  auth)  exec gdocs-suite-auth ;;
+  serve) exec gdocs-suite-mcp  ;;
   *)     exec "$@"            ;;
 esac
