@@ -72,7 +72,7 @@ def main() -> None:
 
 
 def auth_main() -> None:
-    """Entry point for the google-docs-auth command."""
+    """Entry point for the gdocs-suite-auth command."""
     from gdocs_suite_mcp.auth.oauth import DocsAuthError, get_credentials
     from gdocs_suite_mcp.auth.token_store import FileTokenStore
     from gdocs_suite_mcp.config import ConfigurationError, load_config

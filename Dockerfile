@@ -36,7 +36,7 @@ VOLUME ["/tokens"]
 
 LABEL org.opencontainers.image.title="gdocs-suite-mcp" \
       org.opencontainers.image.description="MCP server exposing Google Docs, Sheets, and Slides as tools for Claude" \
-      org.opencontainers.image.source="https://github.com/stratosphereips/strato-mcp-google-docs" \
+      org.opencontainers.image.source="https://github.com/stratosphereips/strato-mcp-gdocs-suite" \
       org.opencontainers.image.version="0.1.0" \
       org.opencontainers.image.licenses="MIT"
 

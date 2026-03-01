@@ -121,8 +121,8 @@ enabled = true
 ## Alternative: local install
 
 ```bash
-git clone https://github.com/stratosphereips/strato-mcp-google-docs
-cd strato-mcp-google-docs
+git clone https://github.com/stratosphereips/strato-mcp-gdocs-suite
+cd strato-mcp-gdocs-suite
 uv venv && source .venv/bin/activate
 uv pip install -e .
 cp .env.example .env
@@ -131,7 +131,7 @@ cp .env.example .env
 Authenticate once:
 
 ```bash
-google-docs-auth
+gdocs-suite-auth
 ```
 
 Start MCP server:
