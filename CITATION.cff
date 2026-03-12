@@ -1,6 +1,7 @@
 cff-version: 1.2.0
 title: >-
-  Collectress: Automated Framework To Collect Web Data
+  A Python MCP server that exposes Google Docs, Google Sheets, and Google
+  Slides as tools for Coding Agents
 message: 'If you use this software, please cite it as specified below.'
 type: software
 authors:
